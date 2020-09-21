@@ -1,0 +1,148 @@
+﻿@model AppMarkom.Web.ViewModels.company.companyIndex
+@{
+    Layout = "_Layout";
+}
+<div class="card card-danger">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12" style="text-align:right">
+                <button class="btn btn-primary" id="btnNew">Add New</button>
+            </div>
+        </div>
+        <div></div>
+        <div class="row">
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="Select company Code">
+            </div>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="Select company Name">
+            </div>
+            <div class="col-2">
+                <input type="text" class="form-control" placeholder="Created ">
+            </div>
+            <div class="col-2">
+                <input type="text" class="form-control" placeholder="Created By">
+            </div>
+            <div class="col-2" style="text-align:right">
+                <button class="btn btn-warning" id="btnView">Search</button>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                Code
+            </th>
+            <th>
+                Company Name
+            </th>
+            <th>
+                Created Date
+            </th>
+            <th>
+                Created By
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CompanyModel)
+        {
+            <tr>
+                <td>
+                    @item.Code
+                </td>
+                <td>@item.Name</td>
+                <td>@item.CreatedDate</td>
+                <td>@item.CreatedBy</td>
+                <td>
+                    <a style="cursor:pointer" id="btnShow" data-id="@item.Id"><i class="fas fa-search"></i></a>
+                    <a style="cursor:pointer" id="btnEdit" data-id="@item.Id"><i class="fas fa-pencil-alt"></i></a>
+                    <a style="cursor:pointer" id="btnDelete" data-id="@item.Id"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#btnNew").click(function () {
+            $.ajax({
+                url: '@Url.Action("Create","Company")',
+                type: 'get',
+                success: function (result) {
+                    $(".modal-title").html("Add Company");
+                    $(".modal-body").html(result);
+                    $("#modal-default").modal("show");
+                }
+            })
+        })
+
+        $("#btnShow").click(function () {
+             $.ajax({
+                url: '@Url.Action("GetCompanyId", "Company")',
+                type: 'get',
+                data: { id: $(this).attr("data-id") },
+                success: function (result) {
+                    $(".modal-title").html("View Biodata");
+                    $(".modal-body").html(result);
+                    $(".modal").modal("show");
+
+                }
+            });
+        })
+
+         $("#btnEdit").click(function () {
+             $.ajax({
+                url: '@Url.Action("Update", "Company")',
+                type: 'get',
+                data: { id: $(this).attr("data-id") },
+                success: function (result) {
+                    $(".modal-title").html("Edit Biodata");
+                    $(".modal-body").html(result);
+                    $(".modal").modal("show");
+
+                }
+            });
+         })
+
+         $("#btnDelete").click(function () {
+             $.ajax({
+                url: '@Url.Action("Delete", "Company")',
+                type: 'get',
+                data: { id: $(this).attr("data-id") },
+                success: function (result) {
+                    $(".modal-title").html("Delete Biodata");
+                    $(".modal-body").html(result);
+                    $(".modal").modal("show");
+
+                }
+            });
+        })
+    </script>
+
+}
