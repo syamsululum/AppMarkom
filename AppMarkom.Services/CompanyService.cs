@@ -115,15 +115,25 @@ namespace AppMarkom.Services
 
         public List<m_company> GetCompanies(string code = "", string name = "", DateTime? createdDate = null, string created = "")
         {
-            //if (string.IsNullOrEmpty(code) & string.IsNullOrEmpty(name) & createdDate != null & string.IsNullOrEmpty(created))
-            //{
-                return _ctx.m_companies
-                    .Where(x => x.Code == code)
-                    .Where(x => x.Name == name)
-                    .Where(x => x.CreatedDate == createdDate)
-                    .Where(x => x.CreatedBy == created)
-                    .ToList();
-            //}
+            var query = (from o in _ctx.m_companies.ToList() select o);
+            if (!string.IsNullOrEmpty(code))
+            {
+                query = query.Where(q => q.Code == code);
+            }
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(q => q.Name == name);
+            }
+            if (createdDate != null)
+            {
+                query = query.Where(q => q.CreatedDate == createdDate);
+            }
+            if (!string.IsNullOrEmpty(created))
+            {
+                query = query.Where(q => q.CreatedBy == created);
+            }
+
+            return query.ToList();
         }
 
         public m_company GetCompanyById(int id)

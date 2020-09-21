@@ -14,15 +14,11 @@
         $.ajax({
             url: '@Url.Action("DeleteEmployee","Company")',
             type: 'delete',
-            data: {id: $(this).attr("data-id")},
+            data: { id: $(this).attr('data-id')},
             success: function (result) {
-                if (result.data) {
                     alert("Data Successfully Deleted");
-                    $(".modal").modal("hide");
-                } else {
-                    alert("Error");
-                }
-                }
+                    $('.modal').modal("hide");
+                
             }
         });
         return false;

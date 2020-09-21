@@ -1,7 +1,5 @@
 ﻿@model AppMarkom.Web.ViewModels.company.companyIndex
-@{
-    Layout = "_Layout";
-}
+
 <div class="card card-danger">
     <div class="card-body">
         <div class="row">
@@ -30,7 +28,7 @@
     </div>
     <!-- /.card-body -->
 </div>
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover" id="tableCompany">
     <thead>
         <tr>
             <th>
@@ -144,7 +142,8 @@
             });
          })
 
-          $("#btnView").click(function () {
+        $("#btnView").click(function () {
+            alert("id");
             $.ajax({
                 url: '@Url.Action("Search","Company")',
                 type: 'get',

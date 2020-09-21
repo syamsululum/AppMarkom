@@ -100,6 +100,29 @@ namespace AppMarkom.Web.Controllers
             }
             return Ok(deleteCompany);
         }
-       
+        [HttpGet]
+        public ActionResult Search(string code="", string name="", DateTime? createdDate = null, string created = "")
+        {
+            var company = _company.GetCompanies(code, name, createdDate, created);
+            var companyModel = company.Select(x => new companyViewModel
+            {
+                Id = x.Id,
+                Code = x.Code,
+                Name = x.Name,
+                Address = x.Address,
+                Phone = x.Phone,
+                Email = x.Email,
+                IsDelete = x.IsDelete,
+                CreatedBy = x.CreatedBy,
+                CreatedDate = x.CreatedDate,
+                UpdatedBy = x.UpdatedBy,
+                UpdatedDate = x.UpdatedDate
+            }).ToList();
+            var companies = new companyIndex
+            {
+                CompanyModel = companyModel
+            };
+            return PartialView(companies);
+        }
     }
 }
