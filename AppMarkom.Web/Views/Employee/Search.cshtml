@@ -1,7 +1,5 @@
-﻿@model AppMarkom.Web.ViewModels.company.companyIndex
-@{
-    Layout = "_Layout";
-}
+﻿@model AppMarkom.Web.ViewModels.employee.employeeIndex
+
 <div class="card card-danger">
     <div class="card-body">
         <div class="row">
@@ -11,27 +9,37 @@
         </div>
         <div></div>
         <div class="row">
-            <div class="col-3">
-                <select class="form-control select2" style="width: 100%;" data-placeholder="Select Company Code" id="txtCode">
+            <div class="col-2">
+                <select class="form-control select2" style="width: 100%;" data-placeholder="Select Id" id="txtCode">
                     <option></option>
-                    @foreach (var item in Model.CompanyModel)
+                    @foreach (var item in Model.employees)
                     {
                         <option value="@item.Code">@item.Code</option>
                     }
                 </select>
             </div>
-            <div class="col-3">
-                <select class="form-control select2" style="width: 100%;" data-placeholder="Select Company Name" id="txtName">
+            <div class="col-2">
+                <select class="form-control select2" style="width: 100%;" data-placeholder="Select Name" id="txtName">
                     <option></option>
-                    @foreach (var item in Model.CompanyModel)
+                    @foreach (var item in Model.employees)
                     {
-                        <option value="@item.Name">@item.Name</option>
+                        <option value="@item.FirstName">@item.FirstName</option>
                     }
                 </select>
             </div>
             <div class="col-2">
+                <select class="form-control select2" style="width: 100%;" data-placeholder="Select Company" id="txtCompanyName">
+                    <option></option>
+                    @foreach (var item in Model.employees)
+                    {
+                        <option value="@item.MCompany.Name">@item.MCompany.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-2">
+                @*<input type="text" id="txtCreated" class="form-control" placeholder="Created ">*@
                 <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="txtCreated" />
+                    <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" />
                     <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
@@ -50,31 +58,21 @@
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>
-                Code
-            </th>
-            <th>
-                Company Name
-            </th>
-            <th>
-                Created Date
-            </th>
-            <th>
-                Created By
-            </th>
-            <th>
-                Action
-            </th>
+            <th>Employee ID Number</th>
+            <th>Employee Name</th>
+            <th>Company Name</th>
+            <th>Created Date</th>
+            <th>Created By</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.CompanyModel)
+        @foreach (var item in Model.employees)
         {
             <tr>
-                <td>
-                    @item.Code
-                </td>
-                <td>@item.Name</td>
+                <td>@item.Code</td>
+                <td>@item.FirstName  @item.LastName</td>
+                <td>@item.MCompany.Name</td>
                 <td>@item.CreatedDate</td>
                 <td>@item.CreatedBy</td>
                 <td>
@@ -107,75 +105,43 @@
 
 @section Scripts{
     <script type="text/javascript">
-        $("#btnNew").click(function () {
+        $("#btnShow").click(function () {
             $.ajax({
-                url: '@Url.Action("Create","Company")',
+                url: '@Url.Action("GetEmployeeId", "Employee")',
+                type: 'get',
+                data: { id: $(this).attr("data-id") },
+                success: function (result) {
+                    $(".modal-title").html("View Employee");
+                    $(".modal-body").html(result);
+                    $(".modal").modal("show");
+
+                }
+            });
+        });
+
+        $('#btnNew').click(function () {
+            $.ajax({
+                url: '@Url.Action("Create","Employee")',
                 type: 'get',
                 success: function (result) {
-                    $(".modal-title").html("Add Company");
-                    $(".modal-body").html(result);
-                    $("#modal-default").modal("show");
+                    $('.modal-title').html("Add Employee");
+                    $('.modal-body').html(result);
+                    $('.modal').modal("show");
                 }
             })
         })
 
-        $("#btnShow").click(function () {
-             $.ajax({
-                url: '@Url.Action("GetCompanyId", "Company")',
-                type: 'get',
-                data: { id: $(this).attr("data-id") },
-                success: function (result) {
-                    $(".modal-title").html("View Biodata");
-                    $(".modal-body").html(result);
-                    $(".modal").modal("show");
-
-                }
-            });
-        })
-
-         $("#btnEdit").click(function () {
-             $.ajax({
-                url: '@Url.Action("Update", "Company")',
-                type: 'get',
-                data: { id: $(this).attr("data-id") },
-                success: function (result) {
-                    $(".modal-title").html("Edit Biodata");
-                    $(".modal-body").html(result);
-                    $(".modal").modal("show");
-
-                }
-            });
-         })
-
-         $("#btnDelete").click(function () {
-             $.ajax({
-                url: '@Url.Action("Delete", "Company")',
-                type: 'get',
-                data: { id: $(this).attr("data-id") },
-                success: function (result) {
-                    $(".modal-title").html("Delete Biodata");
-                    $(".modal-body").html(result);
-                    $(".modal").modal("show");
-
-                }
-            });
-         })
-
-          $("#btnView").click(function () {
+        $('#btnEdit').click(function () {
             $.ajax({
-                url: '@Url.Action("Search","Company")',
+                url: '@Url.Action("Update","Employee")',
                 type: 'get',
-                data: {
-                    code: $('#txtCode').val(),
-                    name: $('#txtName').val(),
-                    created: $('#txtCreated').val(),
-                    createdBy: $('#txtCreatedBy').val()
-                },
+                data: {id: $(this).attr('data-id')},
                 success: function (result) {
-                    $('#tableCompany').html(result);
+                    $('.modal-title').html("Edit Employee");
+                    $('.modal-body').html(result);
+                    $('.modal').modal("show");
                 }
-            });
+            })
         })
     </script>
-
 }

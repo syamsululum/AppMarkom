@@ -115,7 +115,7 @@ namespace AppMarkom.Services
 
         public List<m_company> GetCompanies(string code = "", string name = "", DateTime? createdDate = null, string created = "")
         {
-            var query = (from o in _ctx.m_companies.ToList() select o);
+            var query = (from o in _ctx.m_companies.Where(x => x.IsDelete == false).ToList() select o);
             if (!string.IsNullOrEmpty(code))
             {
                 query = query.Where(q => q.Code == code);

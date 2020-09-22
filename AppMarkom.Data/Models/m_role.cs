@@ -7,7 +7,6 @@ namespace AppMarkom.Data.Models
 {
     public class m_role
     {
-        [MaxLength(11)]
         public int Id { get; set; }
         [Required]
         [MaxLength(50)]

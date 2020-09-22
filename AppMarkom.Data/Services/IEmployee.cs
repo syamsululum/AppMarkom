@@ -13,6 +13,6 @@ namespace AppMarkom.Data.Services
         ServiceResponse<m_employee> CreateEmployee(m_employee model);
         ServiceResponse<m_employee> EditEmployee(m_employee model);
         ServiceResponse<bool> DeleteEmployee(int id);
-
+        List<m_employee> GetEmployees(string code = "", string name = "", string companyName = "", DateTime? createdDate = null, string created = "");
     }
 }

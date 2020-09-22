@@ -5,62 +5,165 @@
 
 }
 
-    <section class="content">
-        <div class="container-fluid">
-            <!-- /.row -->
+    <div class="card card-danger">
+        <div class="card-body">
             <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Fixed Header Table</h3>
-
-                            <div class="card-tools">
-                                <div class="input-group input-group-sm" style="width: 150px;">
-                                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body table-responsive p-0" style="height: 300px;">
-                            <table class="table table-head-fixed text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th>Employee ID Number</th>
-                                        <th>Employee Name</th>
-                                        <th>Company Name</th>
-                                        <th>Created Date</th>
-                                        <th>Created By</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.employees)
-                                    {
-                                        <tr>
-                                            <th>@item.Code</th>
-                                            <th>@item.FirstName  @item.LastName</th>
-                                            <th>@item.MCompany.Name</th>
-                                            <th>@item.CreatedDate</th>
-                                            <th>@item.CreatedBy</th>
-                                            <th>
-                                                <a style="cursor:pointer" id="btnShow" data-id="@item.Id"><i class="fas fa-search"></i></a>
-                                                <a style="cursor:pointer" id="btnEdit" data-id="@item.Id"><i class="fas fa-pencil-alt"></i></a>
-                                                <a style="cursor:pointer" id="btnDelete" data-id="@item.Id"><i class="fas fa-trash"></i></a>
-                                            </th>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
+                <div class="col-12" style="text-align:right">
+                    <button class="btn btn-primary" id="btnNew">Add New</button>
                 </div>
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </section>
+            <div></div>
+            <div class="row">
+                <div class="col-2">
+                    <select class="form-control select2" style="width: 100%;" data-placeholder="Select Id" id="txtCode">
+                        <option></option>
+                        @foreach (var item in Model.employees)
+                        {
+                            <option value="@item.Code">@item.Code</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-2">
+                    <select class="form-control select2" style="width: 100%;" data-placeholder="Select Name" id="txtName">
+                        <option></option>
+                        @foreach (var item in Model.employees)
+                        {
+                            <option value="@item.FirstName">@item.FirstName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-2">
+                    <select class="form-control select2" style="width: 100%;" data-placeholder="Select Company" id="txtCompanyName">
+                        <option></option>
+                        @foreach (var item in Model.employees)
+                        {
+                            <option value="@item.MCompany.Name">@item.MCompany.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-2">
+                    @*<input type="text" id="txtCreated" class="form-control" placeholder="Created ">*@
+                    <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                        <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="txtCreatedDate" />
+                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <input type="text" id="txtCreatedBy" class="form-control" placeholder="Created By">
+                </div>
+                <div class="col-2" style="text-align:right">
+                    <button class="btn btn-warning" id="btnSearch">Search</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+<table class="table table-bordered table-hover" id="tableEmployee">
+    <thead>
+        <tr>
+            <th>Employee ID Number</th>
+            <th>Employee Name</th>
+            <th>Company Name</th>
+            <th>Created Date</th>
+            <th>Created By</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.employees)
+        {
+            <tr>
+                <td>@item.Code</td>
+                <td>@item.FirstName  @item.LastName</td>
+                <td>@item.MCompany.Name</td>
+                <td>@item.CreatedDate</td>
+                <td>@item.CreatedBy</td>
+                <td>
+                    <a style="cursor:pointer" id="btnShow" data-id="@item.Id"><i class="fas fa-search"></i></a>
+                    <a style="cursor:pointer" id="btnEdit" data-id="@item.Id"><i class="fas fa-pencil-alt"></i></a>
+                    <a style="cursor:pointer" id="btnDelete" data-id="@item.Id"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@section Scripts{ 
+    <script type="text/javascript">
+        $("#btnShow").click(function () {
+            $.ajax({
+                url: '@Url.Action("GetEmployeeId", "Employee")',
+                type: 'get',
+                data: { id: $(this).attr("data-id") },
+                success: function (result) {
+                    $(".modal-title").html("View Employee");
+                    $(".modal-body").html(result);
+                    $(".modal").modal("show");
+
+                }
+            });
+        });
+
+        $('#btnNew').click(function () {
+            $.ajax({
+                url: '@Url.Action("Create","Employee")',
+                type: 'get',
+                success: function (result) {
+                    $('.modal-title').html("Add Employee");
+                    $('.modal-body').html(result);
+                    $('.modal').modal("show");
+                }
+            })
+        })
+
+        $('#btnEdit').click(function () {
+            $.ajax({
+                url: '@Url.Action("Update","Employee")',
+                type: 'get',
+                data: {id: $(this).attr('data-id')},
+                success: function (result) {
+                    $('.modal-title').html("Edit Employee");
+                    $('.modal-body').html(result);
+                    $('.modal').modal("show");
+                }
+            })
+        })
+
+        $('#btnSearch').click(function () {
+            $.ajax({
+                url: '@Url.Action("Search","Employee")',
+                type: 'get',
+                data: {
+                    code: $('#txtCode').val(),
+                    name: $('#txtName').val(),
+                    companyName: $('#txtCompanyName').val(),
+                    createdDate: $('#txtCreatedDate').val(),
+                    created: $('#txtCreatedBy').val()
+                },
+                success: function (result) {
+                    $('#tableEmployee').html(result);
+                }
+            })
+        })
+    </script>
+}

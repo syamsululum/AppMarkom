@@ -1,5 +1,4 @@
-﻿@model AppMarkom.Web.ViewModels.company.companyViewModel
-
+﻿@model AppMarkom.Web.ViewModels.role.roleViewModel
 
 <form>
     <h3>Delete Data?</h3>
@@ -9,16 +8,19 @@
     </div>
 </form>
 
+
 <script type="text/javascript">
     $("#btnRemove").click(function () {
         $.ajax({
-            url: '@Url.Action("DeleteCompany","Company")',
+            url: '@Url.Action("DeleteRole","Role")',
             type: 'delete',
             data: { id: $(this).attr('data-id')},
             success: function (result) {
-                alert("Data Deleted");
-                $('.modal').modal("hide");
-               window.location.href = '@Url.Action("GetCompanies", "Company")'
+                if (result.isSuccess) {
+                    alert("Data Deleted");
+                    $('.modal').modal("hide");
+                    window.location.href = '@Url.Action("GetRoles", "Role")'
+                }
             }
         });
         return false;

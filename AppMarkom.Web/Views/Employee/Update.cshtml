@@ -1,42 +1,45 @@
-﻿@model AppMarkom.Web.ViewModels.company.companyViewModel
+﻿@model AppMarkom.Web.ViewModels.employee.employeeViewModel
 
 <form id="form-update">
     <div class="row">
         <div class="col-sm-6">
             <!-- text input -->
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.CreatedBy)
+            @Html.HiddenFor(model => model.CreatedDate)
             <div class="form-group">
-                <label>Company Code</label>
+                <label>ID Number</label>
                 @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
                 @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
-                <label>Company Name</label>
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                <label>First Name</label>
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
-                <label>Phone</label>
-                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                <label>Last Name</label>
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="col-sm-6">
             <div class="form-group">
+                <label>Company Name</label>
+                @Html.DropDownListFor(model => model.MCompany.Id, (IEnumerable<SelectListItem>)ViewBag.CompanyList, "-Select-", new { @class = "form-control", @type = "companyId" })
+                @Html.ValidationMessageFor(model => model.MCompany, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
                 <label>Email</label>
                 @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group">
-                <label>Address</label>
-                @Html.TextAreaFor(model => model.Address, 4, 29, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
             </div>
         </div>
 
     </div>
     <div class="row">
         <div class="btn btn-group" style="text-align:right">
-            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+            <button class="btn btn-primary btn-sm" id="btnSubmit" type="submit">Submit</button>
             <button class="btn btn-warning btn-sm" id="btnClose" data-dismiss="modal">Close</button>
         </div>
     </div>
@@ -47,52 +50,49 @@
 <script type="text/javascript">
     $('#form-update').submit(function () {
         $.ajax({
-            url: '@Url.Action("Update", "Company")',
+            url: '@Url.Action("Update", "Employee")',
             type: 'put',
             data: $(this).serialize(),
             success: function (result) {
                 alert("Data Updated");
                 $('.modal').modal("hide");
-               window.location.href = '@Url.Action("GetCompanies", "Company")'
+                window.location.href = '@Url.Action("GetEmployees","Employee")'
             }
-        })
-    })
+        });
+        return false;
+    });
 
     $(document).ready(function () {
+        jQuery.validator.addMethod('selectcheck', function (value) {
+            return (value != null);
+        }, "year required");
 
-        jQuery.validator.addMethod("phonenu", function (value, element) {
-            if (/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g.test(value)) {
-                return true;
-            } else {
-                return false;
-            };
-        }, "Invalid phone number");
         $('#form-update').validate({
             rules: {
                 Email: {
                     required: true,
                     email: true,
                 },
-                Name: {
+                FirstName: {
                     required: true,
                 },
-                Phone: {
-                    phonenu: true,
-                    required: true
+                companyId: {
+                    selectcheck: true
                 }
+
             },
             messages: {
-                email: {
+                Email: {
                     required: "Please enter a email address",
                     email: "Please enter a vaild email address"
                 },
-                Name: {
+                FirstName: {
                     required: "Please enter name",
                 },
-                Phone: {
-                    required: "Plese enter Phone",
-                    phonenu: "Please enter a valid phone"
+                companyId: {
+                    selectcheck: "Please select an item!"
                 }
+
             },
             errorElement: 'span',
             errorPlacement: function (error, element) {

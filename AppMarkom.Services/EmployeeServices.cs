@@ -111,7 +111,9 @@ namespace AppMarkom.Services
 
         public m_employee GetEmployeeById(int id)
         {
-            return _ctx.m_employees.Find(id);
+            return _ctx.m_employees
+                .Include(x => x.MCompany)
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public List<m_employee> GetEmployees()
@@ -134,6 +136,37 @@ namespace AppMarkom.Services
                         UpdatedDate = x.UpdatedDate
                     }).ToList();
         }
+
+        public List<m_employee> GetEmployees(string code = "", string name = "", string companyName = "", DateTime? createdDate = null, string created = "")
+        {
+            var query = (from o in 
+                             _ctx.m_employees
+                             .Include(x => x.MCompany)
+                             .Where(x => x.IsDelete == false).ToList() select o);
+            if (!string.IsNullOrEmpty(code))
+            {
+                query = query.Where(q => q.Code == code);
+            }
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(q => q.FirstName == name);
+            }
+            if (!string.IsNullOrEmpty(companyName))
+            {
+                query = query.Where(q => q.MCompany.Name == companyName);
+            }
+            if (createdDate != null)
+            {
+                query = query.Where(q => q.CreatedDate == createdDate);
+            }
+            if (!string.IsNullOrEmpty(created))
+            {
+                query = query.Where(q => q.CreatedBy == created);
+            }
+
+            return query.ToList();
+        }
+
         private string GenerateCode()
         {
             // get Max code

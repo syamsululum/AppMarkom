@@ -91,13 +91,9 @@ namespace AppMarkom.Web.Controllers
             return PartialView(serializeCompany);
         }
         [HttpDelete]
-        public ActionResult DeleteEmployee(int id)
+        public ActionResult DeleteCompany(int id)
         {
             var deleteCompany = _company.DeleteCompany(id);
-            if(deleteCompany.IsSuccess == true)
-            {
-                return RedirectToAction("GetCompanies()");
-            }
             return Ok(deleteCompany);
         }
         [HttpGet]

@@ -8,7 +8,6 @@ namespace AppMarkom.Web.ViewModels.role
 {
     public class roleViewModel
     {
-        [MaxLength(11)]
         public int Id { get; set; }
         [MaxLength(50)]
         public string Code { get; set; }

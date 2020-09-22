@@ -13,6 +13,6 @@ namespace AppMarkom.Data.Services
         ServiceResponse<m_role> EditRole(m_role role);
         m_role GetRoleById(int id);
         ServiceResponse<bool> DeleteRole(int id);
-
+        List<m_role> GetRoles(string code = "", string name = "", DateTime? createdDate = null, string created = "");
     }
 }

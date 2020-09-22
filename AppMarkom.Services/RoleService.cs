@@ -21,9 +21,9 @@ namespace AppMarkom.Services
         {
             try
             {
-                role.Code = GenCode();
+                role.Code = "RO" + GenCode();
                 role.IsDelete = false;
-                role.CreatedBy = "";
+                role.CreatedBy = "Administrator";
                 role.CreatedDate = DateTime.UtcNow;
                 _ctx.m_roles.Add(role);
                 _ctx.SaveChanges();
@@ -36,7 +36,7 @@ namespace AppMarkom.Services
                     Data = role
                 };
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return new ServiceResponse<m_role>
                 {
@@ -65,7 +65,7 @@ namespace AppMarkom.Services
                     Data = true
                 };
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return new ServiceResponse<bool>
                 {
@@ -79,10 +79,10 @@ namespace AppMarkom.Services
 
         public ServiceResponse<m_role> EditRole(m_role role)
         {
+            role.UpdatedBy = "Administrator";
+            role.UpdatedDate = DateTime.UtcNow;
             try
             {
-                role.UpdatedBy = "";
-                role.UpdatedDate = DateTime.UtcNow;
                 _ctx.m_roles.Update(role);
                 _ctx.SaveChanges();
 
@@ -115,6 +115,30 @@ namespace AppMarkom.Services
         {
             return _ctx.m_roles.Where(x => x.IsDelete == false).ToList();
         }
+
+        public List<m_role> GetRoles(string code = "", string name = "", DateTime? createdDate = null, string created = "")
+        {
+            var query = (from o in _ctx.m_roles.Where(x => x.IsDelete == false).ToList() select o);
+            if (!string.IsNullOrEmpty(code))
+            {
+                query = query.Where(q => q.Code == code);
+            }
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(q => q.Name == name);
+            }
+            if (createdDate != null)
+            {
+                query = query.Where(q => q.CreatedDate == createdDate);
+            }
+            if (!string.IsNullOrEmpty(created))
+            {
+                query = query.Where(q => q.CreatedBy == created);
+            }
+
+            return query.ToList();
+        }
+
         private string GenCode()
         {
             string maxCode = GetRoles().Max(x => x.Code);

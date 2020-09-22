@@ -1,0 +1,25 @@
+﻿@model AppMarkom.Web.ViewModels.employee.employeeViewModel
+
+    <form>
+        <h3>Delete Data?</h3>
+        <div class="btn btn-group">
+            <button class="btn btn-primary btn-sm" id="btnRemove" data-id="@Model.Id" type="submit">Delete</button>
+            <button class="btn btn-warning btn-sm" data-dismiss="modal">Close</button>
+        </div>
+    </form>
+
+    <script type="text/javascript">
+    $("#btnRemove").click(function () {
+        $.ajax({
+            url: '@Url.Action("DeleteEmployee","Company")',
+            type: 'delete',
+            data: { id: $(this).attr('data-id')},
+            success: function (result) {
+                alert("Data Deleted");
+                $('.modal').modal("hide");
+               window.location.href = '@Url.Action("GetEmployees", "Company")'
+            }
+        });
+        return false;
+    });
+    </script>
